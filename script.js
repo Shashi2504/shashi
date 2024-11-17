@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
         submitButton.disabled=true
         submitButton.textContent = "Sending...";
 
-        fetch("https://your-server-domain.com/send-email", {
+        fetch("https://devops-portfolio-ipm0q1lnc-shashis-projects-55ed6956.vercel.app/api/send-email", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
