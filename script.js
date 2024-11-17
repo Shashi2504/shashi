@@ -62,15 +62,33 @@ document.addEventListener('DOMContentLoaded', function() {
         const name = document.getElementById('name').value;
         const email = document.getElementById('email').value;
         const message = document.getElementById('message').value;
-        
-        // Here you would typically send the form data to a server
-        console.log('Form submitted:', { name, email, message });
-        
-        // Clear the form
-        contactForm.reset();
-        
-        // Show a success message (you can replace this with a more sophisticated notification)
-        alert('Thank you for your message! I will get back to you soon.');
+
+        const submitButton = this.querySelector('button[type="submit"]');
+        submitButton.disabled=true
+        submitButton.textContent = "Sending...";
+
+        fetch("https://your-server-domain.com/send-email", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ name, email, message }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Network response was not ok")
+            }
+            return response.text();
+        })
+        .then(result => {
+            console.log(result);
+            alert("Thank you for your message! I will get back to you soon");
+            contactForm.reset();
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            alert("There was an error sending your message. Please check your internet connection and try again.");
+        });
     });
 
     // Cosmic dust animation
@@ -102,4 +120,3 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     revealElements.forEach(element => revealObserver.observe(element));
 });
-
