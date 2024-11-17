@@ -120,10 +120,6 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error("Error:", error);
             alert("There was an error sending your message. Please try again later.");
         })
-        .finally(() => {
-            submitButton.disabled = false;
-            submitButton.textContent = "Send Transmission";
-        });
     });
 
     // Cosmic dust animation
