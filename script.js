@@ -119,4 +119,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     revealElements.forEach(element => revealObserver.observe(element));
+
+    // Mobile menu toggle
+const menuToggle = document.querySelector('.menu-toggle');
+const nav = document.querySelector('nav');
+menuToggle.addEventListener('click', () => {
+    nav.classList.toggle('show');
+});
+
+// Close menu when a link is clicked
+document.querySelectorAll('nav a').forEach(link => {
+    link.addEventListener('click', () => {
+        nav.classList.remove('show');
+    });
+});
 });

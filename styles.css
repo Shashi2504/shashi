@@ -417,12 +417,85 @@ h2 {
     .skills-grid {
         grid-template-columns: repeat(2, 1fr);
     }
+    .container {
+        padding: 0 15px;
+    }
+
+    .hero {
+        padding: 4rem 0;
+    }
+
+    .main-title {
+        font-size: 2.5rem;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+    }
+
+    .tagline {
+        font-size: 1 rem;
+    }
+
+    .skill-category,
+    .project-card,
+    .blog-card {
+        padding: 1 rem;
+    }
+
+    .achievement-list {
+        padding: 1rem;
+    }
+
+    .contact-form,
+    .contact-info {
+        padding: 1rem;
+    }
 }
 
 @media screen and (max-width: 480px) {
     .skills-grid {
         grid-template-columns: 1fr;
     }
+
+    .main-title {
+        font-size: 2rem;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+    }
+
+    .section-title {
+        font-size: 1.8rem;
+    }
+
+    .skills-icon,
+    .project-icon,
+    .blog-icon {
+        font-size: 2rem;
+    }
+
+    .floating-astronaut {
+        width: 60 px;
+        height: 60px;
+    }
+
+    @media (hover: none) and (pointer: coarse) {
+        nav ul li a,
+        .btn-download,
+        .project-link,
+        .read-more,
+        form button {
+            padding: 0.8rem 1rem;
+        }
+    
+        .scroll-to-top {
+            width: 50px;
+            height: 50px;
+        }
+    }
+
 }
 
 /* Accessibility */
@@ -1192,5 +1265,52 @@ footer {
     .contact-form,
     .contact-info {
         width: 100%;
+    }
+}
+
+
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-color);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        z-index: 1000;
+    }
+
+    nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(10, 10, 10, 0.9);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform: translateY(-100%);
+        transition: transform 0.3s ease;
+    }
+
+    nav.show {
+        transform: translateY(0);
+    }
+
+    nav ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav ul li {
+        margin: 1rem 0;
     }
 }
