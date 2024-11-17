@@ -1,5 +1,22 @@
 const nodemailer = require('nodemailer');
 
+function isValidEmail(email) {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
+
+function sanitizeInput(input) {
+  return input.replace(/[&<>"']/g, function(match) {
+    return {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[match];
+  });
+}
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     return res.status(405).send('Method Not Allowed');
@@ -10,6 +27,13 @@ module.exports = async (req, res) => {
   if (!name || !email || !message) {
     return res.status(400).send('Please provide all required fields');
   }
+
+  if (!isValidEmail(email)) {
+    return res.status(400).send('Please provide a valid email address');
+  }
+
+  const sanitizedName = sanitizeInput(name);
+  const sanitizedMessage = sanitizeInput(message);
 
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
@@ -24,8 +48,8 @@ module.exports = async (req, res) => {
   const mailOptions = {
     from: email,
     to: "shashireddy0403@gmail.com",
-    subject: `New message from ${name}`,
-    text: message
+    subject: `New message from ${sanitizedName}`,
+    text: sanitizedMessage
   };
 
   try {

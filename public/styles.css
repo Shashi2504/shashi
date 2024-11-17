@@ -1314,3 +1314,26 @@ footer {
         margin: 1rem 0;
     }
 }
+
+@media print {
+    body {
+        background: white;
+        color: black;
+    }
+    
+    header, footer, .floating-astronaut, .scroll-to-top {
+        display: none;
+    }
+    
+    #resume {
+        page-break-before: always;
+    }
+    
+    .resume-content {
+        border: none;
+    }
+    
+    .btn-download {
+        display: none;
+    }
+}

@@ -4,6 +4,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const taglineElement = document.getElementById('tagline');
     let i = 0;
     function typeWriter() {
+        if (!taglineElement) {
+            console.error("Tagline element not found");
+            return;
+        }
         if (i < tagline.length) {
             taglineElement.innerHTML += tagline.charAt(i);
             i++;
@@ -24,13 +28,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Scroll to top button
     const scrollToTopButton = document.querySelector('.scroll-to-top');
-    window.addEventListener('scroll', () => {
+    function debounce(func, wait = 20, immediate = true) {
+        let timeout;
+        return function() {
+            const context = this, args = arguments;
+            const later = function() {
+                timeout = null;
+                if (!immediate) func.apply(context, args);
+            };
+            const callNow = immediate && !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func.apply(context, args);
+        };
+    }
+
+    window.addEventListener('scroll', debounce(() => {
         if (window.pageYOffset > 100) {
             scrollToTopButton.classList.add('show');
         } else {
             scrollToTopButton.classList.remove('show');
         }
-    });
+    }));
     scrollToTopButton.addEventListener('click', () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
@@ -40,7 +59,9 @@ document.addEventListener('DOMContentLoaded', function() {
     function animateSkillBars() {
         skillBars.forEach(bar => {
             const progress = bar.getAttribute('data-progress');
-            bar.style.width = `${progress}%`;
+            requestAnimationFrame(() => {
+                bar.style.width = `${progress}%`;
+            });
         });
     }
     animateSkillBars();
@@ -59,15 +80,25 @@ document.addEventListener('DOMContentLoaded', function() {
     const contactForm = document.getElementById('contact-form');
     contactForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const message = document.getElementById('message').value;
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const message = document.getElementById('message').value.trim();
+
+        if (!name || !email || !message) {
+            alert("Please fill in all fields");
+            return;
+        }
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            alert("Please enter a valid email address");
+            return;
+        }
 
         const submitButton = this.querySelector('button[type="submit"]');
-        submitButton.disabled=true
+        submitButton.disabled = true;
         submitButton.textContent = "Sending...";
 
-        fetch("https://devops-portfolio-ipm0q1lnc-shashis-projects-55ed6956.vercel.app/api/send-email", {
+        fetch("/api/send-email", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -76,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error("Network response was not ok")
+                throw new Error("Network response was not ok");
             }
             return response.text();
         })
@@ -87,7 +118,11 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error("Error:", error);
-            alert("There was an error sending your message. Please check your internet connection and try again.");
+            alert("There was an error sending your message. Please try again later.");
+        })
+        .finally(() => {
+            submitButton.disabled = false;
+            submitButton.textContent = "Send Transmission";
         });
     });
 
@@ -121,16 +156,16 @@ document.addEventListener('DOMContentLoaded', function() {
     revealElements.forEach(element => revealObserver.observe(element));
 
     // Mobile menu toggle
-const menuToggle = document.querySelector('.menu-toggle');
-const nav = document.querySelector('nav');
-menuToggle.addEventListener('click', () => {
-    nav.classList.toggle('show');
-});
-
-// Close menu when a link is clicked
-document.querySelectorAll('nav a').forEach(link => {
-    link.addEventListener('click', () => {
-        nav.classList.remove('show');
+    const menuToggle = document.querySelector('.menu-toggle');
+    const nav = document.querySelector('nav');
+    menuToggle.addEventListener('click', () => {
+        nav.classList.toggle('show');
     });
-});
+
+    // Close menu when a link is clicked
+    document.querySelectorAll('nav a').forEach(link => {
+        link.addEventListener('click', () => {
+            nav.classList.remove('show');
+        });
+    });
 });
